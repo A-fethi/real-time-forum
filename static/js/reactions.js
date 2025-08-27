@@ -5,14 +5,8 @@ export function attachInteractionListeners() {
 
   reactionsBtns.forEach((button) => {
     if (button.classList.contains("comment")) {
-      console.log(
-        `Attaching event listener to comment button with ID: ${button.dataset.commentId}`
-      );
       button.addEventListener("click", (e) => handleInteraction(e, "comment"));
     } else if (button.classList.contains("post")) {
-      console.log(
-        `Attaching event listener to post button with ID: ${button.dataset.postId}`
-      );
       button.addEventListener("click", (e) => handleInteraction(e, "post"));
     } else {
       console.warn("Invalid button type detected:", button);
@@ -25,8 +19,6 @@ export async function handleInteraction(e, itemtype) {
   e.preventDefault();
   const button = e.target;
   const action = button.value?.toLowerCase();
-
-  console.log(`Interaction detected: ${action} on a ${itemtype}`);
 
   let item_id = null;
   if (itemtype === "post") {
@@ -46,9 +38,6 @@ export async function handleInteraction(e, itemtype) {
   }
 
   try {
-    console.log(
-      `Sending request to /api/reactions with item_id: ${item_id}, item_type: ${itemtype}, action: ${action}`
-    );
 
     const response = await fetch("/api/reactions", {
       method: "POST",
@@ -82,7 +71,6 @@ export async function handleInteraction(e, itemtype) {
         showNotification(`Unkown Type: Reactions only on Posts and Comments`, "error");
         return
       }
-     
     } else {
       console.error("Failed to update interaction. Status:", response.status);
       const err = await response.json();

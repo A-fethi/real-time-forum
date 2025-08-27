@@ -14,16 +14,13 @@ type ErrorResponse struct {
 func SendErrorResponse(resp http.ResponseWriter, statusCode int, message string) {
 	resp.WriteHeader(statusCode)
 	if statusCode == 404 || statusCode == 405 || statusCode == 403 {
-		config.Logger.Println("Rendering ", statusCode, " section in home template")
-		data := struct {
-			StatusCode int
-			Message    string
-		}{
+		config.Logger.Println("Rendering error section in home template")
+		data := config.TemplateData{
+			Is404:      true,
 			StatusCode: statusCode,
 			Message:    message,
 		}
-
-		config.Templates.ExecuteTemplate(resp, "404.html", data)
+		config.Templates.ExecuteTemplate(resp, "home.html", data)
 		return
 	} else {
 		resp.Header().Set("Content-Type", "application/json")
@@ -32,5 +29,4 @@ func SendErrorResponse(resp http.ResponseWriter, statusCode int, message string)
 			Message:    message}
 		json.NewEncoder(resp).Encode(jsonResponse)
 	}
-
 }

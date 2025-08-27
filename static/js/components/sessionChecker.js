@@ -19,9 +19,7 @@ async function CheckAuth(url, options = {}) {
 
         if (response.status === 401) {
             return null;
-        }
-        console.log(response);
-        
+        }        
         return response;
     } catch (error) {
         console.error("Request failed:", error);
